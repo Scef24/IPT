@@ -20,19 +20,26 @@ app.get('/',(req,res)=>{
 
 app.get('/:id',(req, res)=>{
     const bookId = parseInt(req.params.id)
-    const book = books.find((b) =>b.id ===bookId)
+    let book = null
 
-    if(!book) {
-        return res.status(404).json(({error:'Book not found'}))
-    }
-
+   for(let i = 0; i<books.length; i++){
+       if (books[i].id === bookId){
+           book = books[i]
+           }
+}
+    if(book ===null) {
+       res.json({message:'No book found'})
+} 
+else{
     res.json(book)
+}
 
 })
 app.post('/add', (req,res)=>{
     const newBook = req.body;
+     newBook.id = books.length + 1
     books.push(newBook);    
-    res.status(200).json(newBook)
+    res.json(newBook)
 })
 
 app.put('/books/:id',(req,res)=>{
